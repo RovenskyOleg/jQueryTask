@@ -1,0 +1,125 @@
+{
+  "state": "test",
+  "products": [{
+    "currentState": "tire",
+    "pName": "MotoMaster Total Terrain",
+    "sizeStyle": "235/70R16 106T",
+    "imgUrl": "http://s7d5.scene7.com/is/image/CanadianTire/0052280_1?defaultImage=image_na_EN",
+    "pPrice": 46,
+    "pSku": "0062375",
+    "pQuantity": 4,
+    "vehicle": {
+      "year": "2010",
+      "make": "Ford",
+      "model": "Escape",
+      "name": "4 Dr Sport Utility",
+      "option": "Hybrid",
+      "vehicleID": 114863,
+      "IsModeled": true,
+      "sizeChosen": "235/70R16",
+      "id": 1461076589467
+    },
+    "isInStoreOnly": false,
+    "totalProduct": {
+      "stock": 100,
+      "dc": 100
+    }
+  }, {
+    "currentState": "wheel",
+    "pName": "Steel Wheel - Black",
+    "sizeStyle": "",
+    "imgUrl": "http://s7d5.scene7.com/is/image/CanadianTire/0096295_1?defaultImage=image_na_EN",
+    "pPrice": 78,
+    "pSku": "0098928",
+    "pQuantity": 4,
+    "vehicle": {
+      "year": "2010",
+      "make": "Ford",
+      "model": "Escape",
+      "name": "4 Dr Sport Utility",
+      "option": "Hybrid",
+      "vehicleID": 114863,
+      "IsModeled": true,
+      "sizeChosen": "235/70R16",
+      "id": 1461076589467
+    },
+    "isInStoreOnly": false,
+    "totalProduct": {
+      "stock": 20,
+      "dc": 30
+    }
+  }, {
+    "currentState": "wheel",
+    "pName": "Steel Wheel - Black",
+    "sizeStyle": "",
+    "imgUrl": "http://s7d5.scene7.com/is/image/CanadianTire/0418397_1?defaultImage=image_na_EN&wid=160&hei=160&op_sharpen=1",
+    "pPrice": 158,
+    "pSku": "0098928",
+    "pQuantity": 0,
+    "vehicle": {
+      "year": "2010",
+      "make": "Ford",
+      "model": "Escape",
+      "name": "4 Dr Sport Utility",
+      "option": "Hybrid",
+      "vehicleID": 114863,
+      "IsModeled": true,
+      "sizeChosen": "235/50R17",
+      "id": 1461076589467
+    },
+    "isInStoreOnly": false,
+    "totalProduct": {
+      "stock": 0,
+      "dc": 0
+    }
+  }, {
+    "currentState": "wheel",
+    "pName": "Steel Wheel - Black",
+    "sizeStyle": "",
+    "imgUrl": "http://s7d5.scene7.com/is/image/CanadianTire/0348793_1?defaultImage=image_na_EN&wid=160&hei=160&op_sharpen=1",
+    "pPrice": 84,
+    "pSku": "0098928",
+    "pQuantity": 4,
+    "vehicle": {
+      "year": "2010",
+      "make": "Ford",
+      "model": "Escape",
+      "name": "4 Dr Sport Utility",
+      "option": "",
+      "vehicleID": 114863,
+      "IsModeled": true,
+      "sizeChosen": "205/70R16",
+      "id": 1461076589467
+    },
+    "isInStoreOnly": true,
+    "totalProduct": {
+      "stock": 20,
+      "dc": 100
+    }
+  }, {
+    "currentState": "wheel",
+    "pName": "Steel Wheel - Black",
+    "sizeStyle": "",
+    "imgUrl": "http://s7d5.scene7.com/is/image/CanadianTire/0348793_1?defaultImage=image_na_EN&wid=160&hei=160&op_sharpen=1",
+    "pPrice": 74,
+    "pSku": "0098928",
+    "pQuantity": 4,
+    "vehicle": {
+      "year": "2010",
+      "make": "Ford",
+      "model": "Escape",
+      "name": "4 Dr Sport Utility",
+      "option": "",
+      "vehicleID": 114863,
+      "IsModeled": true,
+      "sizeChosen": "205/70R16",
+      "id": 1461076589467
+    },
+    "isInStoreOnly": true,
+    "totalProduct": {
+      "stock": 100,
+      "dc": 1
+    }
+  }],
+  "totalQuantity": 99
+}

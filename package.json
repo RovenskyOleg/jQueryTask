@@ -1,0 +1,17 @@
+{
+  "name"         : "jQueryTask",
+  "version"      : "0.0.0",
+  "description"  : "Test application.",
+  "main"         : "server.js",
+  "author"       : "",
+  "dependencies" : {
+    "express": "~4.9.0",
+    "mongoose": "~4.4.11",
+    "morgan": "~1.2.2",
+    "body-parser": "~1.5.2",
+    "composable-middleware": "^0.3.0",
+    "method-override": "~2.1.2",
+    "errorhandler": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+  }
+}

@@ -1,0 +1,1 @@
+var uri = '/api/products';
