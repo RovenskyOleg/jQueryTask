@@ -20,4 +20,4 @@
     "The product out of stock" если продукт отсутствует на магазине и складе
     "Sorry, the maximum quantity you can order is 'n'". где 'n' - количество items
 
-8 link to presentation http://slides.com/olegrovenskyi/deck
+7 link to presentation http://slides.com/olegrovenskyi/deck
