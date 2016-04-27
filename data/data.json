@@ -55,7 +55,7 @@
     "imgUrl": "http://s7d5.scene7.com/is/image/CanadianTire/0418397_1?defaultImage=image_na_EN&wid=160&hei=160&op_sharpen=1",
     "pPrice": 158,
     "pSku": "0098928",
-    "pQuantity": 0,
+    "pQuantity": 4,
     "vehicle": {
       "year": "2010",
       "make": "Ford",
@@ -120,6 +120,5 @@
       "stock": 100,
       "dc": 1
     }
-  }],
-  "totalQuantity": 99
+  }]
 }
