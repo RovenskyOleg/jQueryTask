@@ -663,7 +663,7 @@ console.log( "Index: " + tests.index( bar.first() ) ); // 1
 <div class="sl-block" data-block-type="image" style="min-width: 30px; min-height: 30px; width: 800px; height: 288.984px; left: 80px; top: 140px;" data-block-id="3dc11a55c10c988bf15ed4aefc8d44fb"><div class="sl-block-content" style="z-index: 12;"><img data-natural-width="1171" data-natural-height="423" data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/492201/images/2526102/2.png"></div></div></section><section data-id="5250b4afe57929948dbfa789aa168d44"><div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 880px; height: 568px; left: 40px; top: 70px;" data-block-id="1ba326b8de84c87ae2ed7a18dd9d4ae3"><div class="sl-block-content" style="z-index: 11;"><pre class="javascript"><code>1 Сверстать форму согласно дизайна
 2 Вывести данные полученный по api (/api/products) или с json файла
 3 Вывести ошибку если запрос fail ("Services unavailable")
-4 Удаление продукат при клике на "x". 
+4 Удаление продуката при клике на "x".
     - При клике на "x" вывести popup с подверждением удаления
 5 При апдейте pQuantity должна менятся Total цена
 6 Валидация
@@ -671,14 +671,15 @@ console.log( "Index: " + tests.index( bar.first() ) ); // 1
 6.2 При buy валидируем наличия товара с сервера.
 6.3 Валидация на целые чисел для QTY
 6.4 Максимальное QTY для каждого товара которое можем купить:
-    - Если Sum = Stock + Sklad &gt;= 99 То можем купить максимум 99. 
-    Если Sum = Stock + Sklad &lt;= 99 То можем купить значение равное Sum
-    Если флаг isInStoreOnly = true То можем купить товар только с магазина 
-    Если Stock + Sklad = 0 то вывод соответсвующего сообщения
+    - Если Sum = Stock + Sklad &gt;= 99 То можем купить максимум 99.
+    - Если Sum = Stock + Sklad &lt;= 99 То можем купить значение равное Sum
+    - Если флаг isInStoreOnly = true То можем купить товар только с магазина
+    - Если Stock + Sklad = 0 то вывод соответсвующего сообщения
 6.5 Вывод ошибок:
     "Services unavailable"
     "The product out of stock" если продукт отсутствует на магазине и складе
-    "Sorry, the maximum quantity you can order is 'n'". где 'n' - количество items</code></pre></div></div></section><section data-id="d8ea371459219381ace88efb9fe69fb0"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 140px;" data-block-id="35e9797fef074c1d79cb660962aa2ec8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+    "Sorry, the maximum quantity you can order is 'n'". где 'n' - количество items
+7 При успешной покупке вывести сообщение что продукты куплены</code></pre></div></div></section><section data-id="d8ea371459219381ace88efb9fe69fb0"><div class="sl-block" data-block-type="text" style="height: auto; width: 800px; left: 80px; top: 140px;" data-block-id="35e9797fef074c1d79cb660962aa2ec8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
 <p style="text-align:left">1 <span style="text-align:left">download </span>project <a href="https://github.com/RovenskyOleg/jQueryTask" target="_blank">https://github.com/RovenskyOleg/jQueryTask</a></p>
 
 <p style="text-align:left">2 download <a href="https://nodejs.org/en/" target="_blank">https://nodejs.org/en/</a> 4 version and install</p>

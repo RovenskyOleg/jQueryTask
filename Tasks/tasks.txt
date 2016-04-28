@@ -1,7 +1,7 @@
 1 Сверстать форму согласно дизайна
 2 Вывести данные полученный по api (/api/products) или с json файла
 3 Вывести ошибку если запрос fail ("Services unavailable")
-4 Удаление продукат при клике на "x".
+4 Удаление продуката при клике на "x".
     - При клике на "x" вывести popup с подверждением удаления
 5 При апдейте pQuantity должна менятся Total цена
 6 Валидация
@@ -10,14 +10,13 @@
 6.3 Валидация на целые чисел для QTY
 6.4 Максимальное QTY для каждого товара которое можем купить:
     - Если Sum = Stock + Sklad >= 99 То можем купить максимум 99.
-        99 хранится в "totalQuantity"
     - Если Sum = Stock + Sklad <= 99 То можем купить значение равное Sum
     - Если флаг isInStoreOnly = true То можем купить товар только с магазина
-        (не забывая про "totalQuantity")
     - Если Stock + Sklad = 0 то вывод соответсвующего сообщения
 6.5 Вывод ошибок:
     "Services unavailable"
     "The product out of stock" если продукт отсутствует на магазине и складе
     "Sorry, the maximum quantity you can order is 'n'". где 'n' - количество items
+7 При успешной покупке вывести сообщение что продукты куплены
 
-7 link to presentation http://slides.com/olegrovenskyi/deck
+8 link to presentation http://slides.com/olegrovenskyi/deck

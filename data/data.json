@@ -1,5 +1,12 @@
 {
   "state": "test",
+  "searchVehicle": {
+    "year": "2010",
+    "make": "Ford",
+    "model": "Escape",
+    "name": "4 Dr Sport Utility",
+    "option": "Hybrid"
+  },
   "products": [{
     "currentState": "tire",
     "pName": "MotoMaster Total Terrain",
@@ -22,7 +29,7 @@
     "isInStoreOnly": false,
     "totalProduct": {
       "stock": 100,
-      "dc": 100
+      "sklad": 100
     }
   }, {
     "currentState": "wheel",
@@ -46,7 +53,7 @@
     "isInStoreOnly": false,
     "totalProduct": {
       "stock": 20,
-      "dc": 30
+      "sklad": 30
     }
   }, {
     "currentState": "wheel",
@@ -70,7 +77,7 @@
     "isInStoreOnly": false,
     "totalProduct": {
       "stock": 0,
-      "dc": 0
+      "sklad": 0
     }
   }, {
     "currentState": "wheel",
@@ -94,7 +101,7 @@
     "isInStoreOnly": true,
     "totalProduct": {
       "stock": 20,
-      "dc": 100
+      "sklad": 100
     }
   }, {
     "currentState": "wheel",
@@ -118,7 +125,7 @@
     "isInStoreOnly": true,
     "totalProduct": {
       "stock": 100,
-      "dc": 1
+      "sklad": 1
     }
   }]
 }
