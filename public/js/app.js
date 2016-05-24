@@ -46,7 +46,9 @@ var productService = (function () {
 
 var cartModule = (function () {
     var productData = {},
-        $el = $('.wrap-product');
+        loadData = {},
+        $el = $('.wrap-product'),
+        api = '/api/products',
         errorMap = {
             qty: {
                 msg: 'Please set correct product QTY'
@@ -56,26 +58,16 @@ var cartModule = (function () {
             }
         },
         templates = {
-            product: _.template($('#product').html()),
+            product: _.template($('#product-section').html()),
             error: _.template($('#error').html())
         };
 
-    function _render (data) {
-        var products = data.products;
-        var domEl = '';
+    function init () {
+        productService.loadData(api)
+            .done(_success)
+            .fail(_fail);
 
-        $.each(products, function(key, value) {
-            if (value.error) {
-                var productEl = templates.product(value);
-                var prod = $(productEl).prepend(templates.error(value.error));
-
-                domEl += prod[0].outerHTML;
-            } else {
-                domEl += templates.product(value);
-            }
-        });
-
-        $el.append(domEl)
+        _addEventListeners();
     }
 
     function _success (data) {
@@ -92,16 +84,51 @@ var cartModule = (function () {
         $('.container').append(templates.error(errorMsg));
     }
 
-    function _renderErrorMsg (el, msg) {
-        _resetError(el);
-
-        el.prepend(templates.error(msg));
-        el.find('.qty').addClass('error-msg');
+    function _addEventListeners () {
+        $('#products').on('click', '.update', _updateQty);
+        $('#buy').on('click', _buyProducts);
     }
 
-    function _resetError (el) {
-        el.find('.error').remove();
-        el.find('.qty').removeClass('error-msg')
+    function _render (data) {
+        var products = data.products;
+        var domEl = '';
+
+        $.each(products, function(key, value) {
+            if (value.error) {
+                var productEl = templates.product(value);
+                var prod = $(productEl)
+                    .find('.qty')
+                        .addClass('error-msg')
+                    .end()
+                    .prepend(templates.error(value.error));
+
+                domEl += prod[0].outerHTML;
+            } else {
+                domEl += templates.product(value);
+            }
+        });
+
+        $el.append(domEl)
+    }
+
+    function _updateQty () {
+        var parent = $(this).closest('.info');
+        var index = $(this).closest('.info').index();
+        var qty = parseInt(parent.find('.qty').val(), 10);
+
+        if(_validateQty(qty, parent, index)) {
+            // send request to save qty
+            _updateTotalPrice(parent, qty, productData.products[index].pPrice);
+
+            _resetError(parent);
+            console.log('qty updated');
+        }
+    }
+
+    function _updateTotalPrice (el, qty, price) {
+        var totalPrice = qty * price;
+
+        el.find('.total-price').text(totalPrice);
     }
 
     function _validateQty (qty, parent, index) {
@@ -122,40 +149,75 @@ var cartModule = (function () {
         return true;
     }
 
-    function _updateTotalPrice (el, qty, price) {
-        var totalPrice = qty * price;
+    function _renderErrorMsg (el, msg) {
+        _resetError(el);
 
-        el.find('.total-price').text(totalPrice);
+        el.prepend(templates.error(msg));
+        el.find('.qty').addClass('error-msg');
     }
 
-    function _updateQty () {
-        var parent = $(this).closest('.info');
-        var index = $(this).closest('.info').index();
-        var qty = parseInt(parent.find('.qty').val(), 10);
-
-        if(_validateQty(qty, parent, index)) {
-            // send request to save qty
-            _updateTotalPrice(parent, qty, productData.products[index].pPrice);
-
-            _resetError(parent);
-            console.log('qty updated');
-        }
+    function _resetError (el) {
+        el.find('.error').remove();
+        el.find('.qty').removeClass('error-msg')
     }
 
-    function _addEventListeners () {
-        $(document).on('click', '.update', _updateQty);
-    }
-    
-    function init () {
-        var api = '/api/products';
-
+    function _buyProducts() {
         productService.loadData(api)
-            .done(_success)
+            .done(_successLoadData)
             .fail(_fail);
-
-        _addEventListeners();
     }
-    
+
+    function _successLoadData (data) {
+        loadData = data;
+        
+        var products = productData.products;
+        var productsOnStore = [];
+        var isValid = true;
+
+        $.each(products, function(key, value) {
+            var pSku = value.pSku;
+            var pQuantity = value.pQuantity;
+
+            productsOnStore = $.grep(loadData.products, function( value, index ) {
+                if (pSku === value.pSku) {
+                    if (_validateByProduct(pQuantity, value)) {
+                        return value.pSku == pSku;
+                    } else {
+                        isValid = false;
+                        return value.error = errorMap.maxVal;
+                    }
+                } else {
+                    return {
+                        error: 'error'
+                    }
+                }
+            });
+        });
+
+        if (isValid) {
+            // send request to buy products
+            console.log('buy products')
+        } else {
+            console.log('we have error')
+        }
+
+        console.log(productsOnStore);
+
+    }
+
+    function _validateByProduct (qty, data) {
+            var totalProduct = data.totalProduct.stock + data.totalProduct.sklad;
+            var pQuantity = qty;
+
+            if (pQuantity >= totalProduct || pQuantity === 0) {
+                // call method show error
+
+                return false;
+            }
+
+            return true;
+    }
+
     return {
         init: init
     }

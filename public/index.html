@@ -6,7 +6,7 @@
     <script id="error" type="text/template">
         <div class="error"><%= msg %></div>
     </script>
-    <script id="product" type="text/template">
+    <script id="product-section" type="text/template">
         <div class="info">
             <button class="remove">Remove Product</button>
             <img src="<%= imgUrl %>" alt="image">
@@ -27,17 +27,18 @@
     <link rel = "stylesheet" href="css/main.css">
 </head>
 <body>
-    <div class="container">
+    <div id="products" class="container">
         <h1>jQuery Homework</h1>
-        <div class="wrap-product">
 
-        </div>
+        <div class="wrap-product"></div>
+
+        <button id="buy">Buy</button>
     </div>
 
 
     <!--<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.js"></script>-->
     <script src = "js/lib/jquery.js"></script>
-    <script src = "js/lib/underscore.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>
