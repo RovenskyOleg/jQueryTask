@@ -127,5 +127,29 @@
       "stock": 100,
       "sklad": 1
     }
+  }, {
+    "currentState": "wheel",
+    "pName": "Steel Wheel - Black",
+    "sizeStyle": "",
+    "imgUrl": "http://koleso.topof.ru/files/amtel_iv-167.jpg",
+    "pPrice": 74,
+    "pSku": "0098928",
+    "pQuantity": 0,
+    "vehicle": {
+      "year": "2010",
+      "make": "Ford",
+      "model": "Escape",
+      "name": "4 Dr Sport Utility",
+      "option": "",
+      "vehicleID": 114863,
+      "IsModeled": true,
+      "sizeChosen": "205/70R16",
+      "id": 1461076589467
+    },
+    "isInStoreOnly": true,
+    "totalProduct": {
+      "stock": 100,
+      "sklad": 1
+    }
   }]
 }

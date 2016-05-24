@@ -1,0 +1,5 @@
+.error,
+.error-msg {
+    color: red;
+    border: 1px solid red;
+}
