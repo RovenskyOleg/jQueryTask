@@ -1,3 +1,5 @@
+// Сервис который отвечает за получение данных по продуктам и базовой их валидации
+
 var productService = (function () {
     var errorMap = {
         qty: {
@@ -7,11 +9,11 @@ var productService = (function () {
 
     function _getProducts (url) {
         return $.get(url)
-            .done(_success)
-            .fail(_fail)
+            .done(_successGetProducts)
+            .fail(_failGetProducts)
     }
 
-    function _totalPrice (qty, price) {
+    function _sumTotalPrice (qty, price) {
         return qty * price;
     }
 
@@ -23,15 +25,15 @@ var productService = (function () {
                 value.error = errorMap.qty
             }
 
-            value.totalPrice = _totalPrice(value.pQuantity, value.pPrice);
+            value.totalPrice = _sumTotalPrice(value.pQuantity, value.pPrice);
         });
     }
 
-    function _success (data) {
+    function _successGetProducts (data) {
         _validateProducts(data);
     }
 
-    function _fail (error) {
+    function _failGetProducts (error) {
         console.log(error)
     }
 
@@ -67,13 +69,15 @@ var cartModule = (function () {
             .done(_success)
             .fail(_fail);
 
-        _addEventListeners();
+
     }
 
     function _success (data) {
         productData = data;
 
         _render(data);
+
+        _addEventListeners();
     }
 
     function _fail (error) {
@@ -120,7 +124,7 @@ var cartModule = (function () {
             // send request to save qty
             _updateTotalPrice(parent, qty, productData.products[index].pPrice);
 
-            _resetError(parent);
+            _removeErrorMsg(parent);
             console.log('qty updated');
         }
     }
@@ -150,13 +154,13 @@ var cartModule = (function () {
     }
 
     function _renderErrorMsg (el, msg) {
-        _resetError(el);
+        _removeErrorMsg(el);
 
         el.prepend(templates.error(msg));
         el.find('.qty').addClass('error-msg');
     }
 
-    function _resetError (el) {
+    function _removeErrorMsg (el) {
         el.find('.error').remove();
         el.find('.qty').removeClass('error-msg')
     }
@@ -178,7 +182,7 @@ var cartModule = (function () {
             var pSku = value.pSku;
             var pQuantity = value.pQuantity;
 
-            productsOnStore = $.grep(loadData.products, function( value, index ) {
+            productsOnStore = $.grep(loadData.products, function(value, index) {
                 if (pSku === value.pSku) {
                     if (_validateByProduct(pQuantity, value)) {
                         return value.pSku == pSku;
