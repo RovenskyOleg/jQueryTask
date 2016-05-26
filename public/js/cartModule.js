@@ -4,11 +4,11 @@
 
 // Модуль для работы с продуктами
 
-var cartModule = (function () {
+var cartModule = (function (productWrap, productTplId, errorTplId) {
     var productData = {},
         loadData = {},
-        $el = $('.wrap-product'),
-        api = '/api/products',
+        $el = $('.' + productWrap),
+        productsUrl = '/api/products',
         errorMap = {
             qty: {
                 msg: 'Please set correct product QTY'
@@ -20,12 +20,12 @@ var cartModule = (function () {
             }
         },
         templates = {
-            product: _.template($('#product-section').html()),
-            error: _.template($('#error').html())
+            product: _.template($('#' + productTplId).html()),
+            error: _.template($('#' + errorTplId).html())
         };
 
     function init () {
-        productService.loadData(api)
+        productService.loadData(productsUrl)
             .done(_success)
             .fail(_fail);
     }
@@ -47,23 +47,25 @@ var cartModule = (function () {
     }
 
     function _addListeners () {
-        $('#products').on('click', '.update', _updateQty);
-        $('#products').on('click', '.remove', _removeProduct);
+        var $products = $('#products');
+
+        $products.on('click', '.update', _updateQty);
+        $products.on('click', '.remove', _removeProduct);
         $('#buy').on('click', _buyProducts);
     }
 
     function _render (data) {
-        var products = data.products;
-        var domEl = '';
+        var products = data.products,
+            domEl = '';
 
         $.each(products, function(key, value) {
             if (value.error) {
-                var productEl = templates.product(value);
-                var prod = $(productEl)
-                    .find('.qty')
-                    .addClass('error-msg')
-                    .end()
-                    .prepend(templates.error(value.error));
+                var productEl = templates.product(value),
+                    prod = $(productEl)
+                        .find('.qty')
+                            .addClass('error-msg')
+                        .end()
+                        .prepend(templates.error(value.error));
 
                 domEl += prod[0].outerHTML;
             } else {
@@ -75,9 +77,9 @@ var cartModule = (function () {
     }
 
     function _updateQty () {
-        var parent = $(this).closest('.info');
-        var skuId = parent.attr('sku');
-        var qty = parseInt(parent.find('.qty').val(), 10);
+        var parent = $(this).closest('.info'),
+            skuId = parent.attr('sku'),
+            qty = parseInt(parent.find('.qty').val(), 10);
 
         if(_validateQty(qty, skuId)) {
             _hideErrorMsg(parent);
@@ -109,8 +111,8 @@ var cartModule = (function () {
     }
 
     function _validateQty (qty, skuId) {
-        var product = _getProduct(skuId);
-        var totalProduct = product.totalProduct.stock + product.totalProduct.sklad;
+        var product = _getProduct(skuId),
+            totalProduct = product.totalProduct.stock + product.totalProduct.sklad;
 
         if (qty === 0) {
             _showErrorMsg(skuId, errorMap.qty);
@@ -134,9 +136,9 @@ var cartModule = (function () {
     }
 
     function _updateTotalPrice (qty, skuId) {
-        var product = _getProduct(skuId);
-        var $skuEl = $('[sku=' + skuId + ']');
-        var totalPrice = qty * product.pPrice;
+        var product = _getProduct(skuId),
+            $skuEl = $('[sku=' + skuId + ']'),
+            totalPrice = qty * product.pPrice;
 
         $skuEl.find('.total-price').text(totalPrice);
     }
@@ -155,8 +157,8 @@ var cartModule = (function () {
     }
 
     function _removeProduct () {
-        var parent = $(this).closest('.info');
-        var skuId = parent.attr('sku');
+        var parent = $(this).closest('.info'),
+            skuId = parent.attr('sku');
 
         // обновляем список продуктов
         productData.products = productData.products
@@ -170,7 +172,7 @@ var cartModule = (function () {
     }
 
     function _buyProducts() {
-        productService.loadData(api)
+        productService.loadData(productsUrl)
             .done(_successLoadData)
             .fail(_fail);
     }
@@ -178,13 +180,13 @@ var cartModule = (function () {
     function _successLoadData (data) {
         loadData = data;
 
-        var products = productData.products;
-        var productsOnStore = [];
-        var isValid = true;
+        var products = productData.products,
+            productsOnStore = [],
+            isValid = true;
 
         $.each(products, function(key, value) {
-            var skuId = value.pSku;
-            var product = value;
+            var skuId = value.pSku,
+                product = value;
 
             productsOnStore = $.grep(loadData.products, function(value, index) {
                 if (skuId === value.pSku) {
@@ -205,4 +207,4 @@ var cartModule = (function () {
     return {
         init: init
     }
-}());
+}('wrap-product', 'product-section', 'error'));
