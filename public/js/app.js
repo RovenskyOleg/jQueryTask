@@ -2,10 +2,15 @@
 
 var productService = (function () {
     var errorMap = {
-        qty: {
-            msg: 'Please set product QTY'
-        }
-    };
+            qty: {
+                msg: 'Please set correct product QTY'
+            },
+            maxVal: function (val) {
+                return {
+                    msg: 'Sorry, the maximum quantity you can order is ' + val
+                }
+            }
+        };
 
     function _getProducts (url) {
         return $.get(url)
@@ -17,24 +22,36 @@ var productService = (function () {
         return qty * price;
     }
 
-    function _validateProducts (data) {
+    function _validate (value) {
+        var totalProduct = value.totalProduct.stock + value.totalProduct.sklad;
+
+        if (value.pQuantity === 0) {
+            return value.error = errorMap.qty;
+        } else if (value.pQuantity > 99) {
+            return value.error = errorMap.maxVal(99);
+        } else if (value.pQuantity > totalProduct) {
+            return value.error = errorMap.maxVal(totalProduct);
+        } else if (value.isInStoreOnly && value.pQuantity > value.totalProduct.stock) {
+            return value.error = errorMap.maxVal(value.totalProduct.stock);
+        }
+
+        return value;
+    }
+
+    function _successGetProducts (data) {
+        // в данной фугкции можно модифицировать полученный от сервера обьект с данными, если нужно
         var products = data.products;
 
         $.each(products, function(key, value) {
-            if (value.pQuantity === 0) {
-                value.error = errorMap.qty
-            }
+            _validate(value);
 
             value.totalPrice = _sumTotalPrice(value.pQuantity, value.pPrice);
         });
     }
 
-    function _successGetProducts (data) {
-        _validateProducts(data);
-    }
-
     function _failGetProducts (error) {
-        console.log(error)
+        // если нужно можем расширить обьект с ошибкой
+        console.log('*** _failGetProducts ***', error)
     }
 
     function loadData (api) {
@@ -55,8 +72,10 @@ var cartModule = (function () {
             qty: {
                 msg: 'Please set correct product QTY'
             },
-            maxVal: {
-                msg: 'Sorry, the maximum quantity you can order is 99'
+            maxVal: function (val) {
+                return {
+                    msg: 'Sorry, the maximum quantity you can order is ' + val
+                }
             }
         },
         templates = {
@@ -68,8 +87,6 @@ var cartModule = (function () {
         productService.loadData(api)
             .done(_success)
             .fail(_fail);
-
-
     }
 
     function _success (data) {
@@ -77,7 +94,7 @@ var cartModule = (function () {
 
         _render(data);
 
-        _addEventListeners();
+        _addListeners();
     }
 
     function _fail (error) {
@@ -88,8 +105,9 @@ var cartModule = (function () {
         $('.container').append(templates.error(errorMsg));
     }
 
-    function _addEventListeners () {
+    function _addListeners () {
         $('#products').on('click', '.update', _updateQty);
+        $('#products').on('click', '.remove', _removeProduct);
         $('#buy').on('click', _buyProducts);
     }
 
@@ -102,7 +120,7 @@ var cartModule = (function () {
                 var productEl = templates.product(value);
                 var prod = $(productEl)
                     .find('.qty')
-                        .addClass('error-msg')
+                    .addClass('error-msg')
                     .end()
                     .prepend(templates.error(value.error));
 
@@ -117,35 +135,56 @@ var cartModule = (function () {
 
     function _updateQty () {
         var parent = $(this).closest('.info');
-        var index = $(this).closest('.info').index();
+        var skuId = parent.attr('sku');
         var qty = parseInt(parent.find('.qty').val(), 10);
 
-        if(_validateQty(qty, parent, index)) {
-            // send request to save qty
-            _updateTotalPrice(parent, qty, productData.products[index].pPrice);
+        if(_validateQty(qty, skuId)) {
+            _hideErrorMsg(parent);
 
-            _removeErrorMsg(parent);
-            console.log('qty updated');
+            _updateTotalPrice(qty, skuId);
+
+            // обновление продукта актуальным значение qty
+            productData.products = productData.products
+                .filter(function (el) {
+                        if (el.pSku === skuId) {
+                            el.pQuantity = qty;
+                        }
+
+                        return true;
+                    }
+                );
+
+            // нужно отправить запрос на сервер для сохраниение qty
+            console.log('*** _updateQty ***', 'qty updated: ' + qty);
         }
     }
 
-    function _updateTotalPrice (el, qty, price) {
-        var totalPrice = qty * price;
+    function _getProduct (skuId) {
+        var product = $.grep(productData.products, function(value, index) {
+            return value.pSku === skuId;
+        });
 
-        el.find('.total-price').text(totalPrice);
+        return product[0];
     }
 
-    function _validateQty (qty, parent, index) {
-        var totalProduct = productData.products[index].totalProduct.stock + productData.products[index].totalProduct.sklad;
+    function _validateQty (qty, skuId) {
+        var product = _getProduct(skuId);
+        var totalProduct = product.totalProduct.stock + product.totalProduct.sklad;
 
         if (qty === 0) {
-            _renderErrorMsg(parent, errorMap.qty);
+            _showErrorMsg(skuId, errorMap.qty);
 
             return false;
-        }
+        } else if (qty > 99) {
+            _showErrorMsg(skuId, errorMap.maxVal(99));
 
-        if (qty >= totalProduct) {
-            _renderErrorMsg(parent, errorMap.maxVal);
+            return false;
+        } else if (qty > totalProduct) {
+            _showErrorMsg(skuId, errorMap.maxVal(totalProduct));
+
+            return false;
+        } else if (product.isInStoreOnly && qty > product.totalProduct.stock) {
+            _showErrorMsg(skuId, errorMap.maxVal(product.totalProduct.stock));
 
             return false;
         }
@@ -153,16 +192,40 @@ var cartModule = (function () {
         return true;
     }
 
-    function _renderErrorMsg (el, msg) {
-        _removeErrorMsg(el);
+    function _updateTotalPrice (qty, skuId) {
+        var product = _getProduct(skuId);
+        var $skuEl = $('[sku=' + skuId + ']');
+        var totalPrice = qty * product.pPrice;
 
-        el.prepend(templates.error(msg));
-        el.find('.qty').addClass('error-msg');
+        $skuEl.find('.total-price').text(totalPrice);
     }
 
-    function _removeErrorMsg (el) {
+    function _showErrorMsg (sku, msg) {
+        var $skuEl = $('[sku=' + sku + ']');
+        _hideErrorMsg($skuEl);
+
+        $skuEl.prepend(templates.error(msg));
+        $skuEl.find('.qty').addClass('error-msg');
+    }
+
+    function _hideErrorMsg (el) {
         el.find('.error').remove();
         el.find('.qty').removeClass('error-msg')
+    }
+
+    function _removeProduct () {
+        var parent = $(this).closest('.info');
+        var skuId = parent.attr('sku');
+
+        // обновляем список продуктов
+        productData.products = productData.products
+            .filter(function (el) {
+                    return el.pSku !== skuId;
+                }
+            );
+
+        parent.remove();
+        // нужно отправить запрос к серверу на удаление продукта передав в параметрах skuId
     }
 
     function _buyProducts() {
