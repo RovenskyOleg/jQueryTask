@@ -236,53 +236,29 @@ var cartModule = (function () {
 
     function _successLoadData (data) {
         loadData = data;
-        
+
         var products = productData.products;
         var productsOnStore = [];
         var isValid = true;
 
         $.each(products, function(key, value) {
-            var pSku = value.pSku;
-            var pQuantity = value.pQuantity;
+            var skuId = value.pSku;
+            var product = value;
 
             productsOnStore = $.grep(loadData.products, function(value, index) {
-                if (pSku === value.pSku) {
-                    if (_validateByProduct(pQuantity, value)) {
-                        return value.pSku == pSku;
-                    } else {
+                if (skuId === value.pSku) {
+                    if (!_validateQty(product.pQuantity, skuId)) {
                         isValid = false;
-                        return value.error = errorMap.maxVal;
-                    }
-                } else {
-                    return {
-                        error: 'error'
                     }
                 }
             });
         });
 
         if (isValid) {
-            // send request to buy products
-            console.log('buy products')
-        } else {
-            console.log('we have error')
+            alert('Success!!!');
+
+            // нужео отправить запрос на сервер на покупку продуктов
         }
-
-        console.log(productsOnStore);
-
-    }
-
-    function _validateByProduct (qty, data) {
-            var totalProduct = data.totalProduct.stock + data.totalProduct.sklad;
-            var pQuantity = qty;
-
-            if (pQuantity >= totalProduct || pQuantity === 0) {
-                // call method show error
-
-                return false;
-            }
-
-            return true;
     }
 
     return {
